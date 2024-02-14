@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     dialog = new Dialog(this);
     layout = new QGridLayout;
-    connect(graphClass,&GraphChart::signalsGraph, this,&MainWindow::graphPrint );
+    connect(graphClass, &GraphChart::signalsGraph, this,&MainWindow::graphPrint );
 
 }
 
@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 void MainWindow::graphPrint(){
+
 
         dialog->setLayout(new QVBoxLayout);
         dialog->layout()->addWidget(chartView);
@@ -176,7 +177,7 @@ QVector<double> MainWindow::FindMin(QVector<double> resultData)
 
 }
 
-void MainWindow::DisplayResult(QVector<double> mins, QVector<double> maxs)
+void MainWindow:: DisplayResult(QVector<double> mins, QVector<double> maxs)
 {
     ui->te_Result->append("Расчет закончен!");
 
@@ -241,17 +242,36 @@ void MainWindow::on_pb_start_clicked()
 
     auto read = [&]{ return ReadFile(pathToFile, numberSelectChannel); };
     auto process = [&](QVector<uint32_t> res){ return ProcessFile(res);};
+
     auto findMax = [&](QVector<double> res){
+
                                                 maxs = FindMax(res);
                                                 mins = FindMin(res);
                                                 DisplayResult(mins, maxs);
 
-                                                graphClass->AddToGraph(mins, maxs, FIRST_GRAPH);
+                                                QVector<double> result  = process(read);
+                                                QVector<double> firstElement = result.first();
+                                                //QVector<double> lastElement = result.last();
+
+
+
+                                                QElapsedTimer timer;
+                                                timer.start();
+
+                                                while (timer.elapsed() < 1000) {
+                                                    QVector<double>::iterator i = firstElement ;
+                                                    graphClass->AddToGraph(i, ++i, FIRST_GRAPH);
+                                                    ++i;
+                                                    graphClass->UpdateGraph(chart);
+                                                }
+
+
+
 
                                                 graphClass->UpdateGraph(chart);
-                                                emit(&GraphChart::signalsGraph);
+                                                emit (&GraphChart::signalsGraph);
 
-                                                QTimer::singleShot(1000, this, &MainWindow::graphPrint);
+
 
 
 

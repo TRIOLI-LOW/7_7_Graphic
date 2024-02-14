@@ -19,6 +19,7 @@ public:
     void AddToGraph (QVector<double> x, QVector<double> y, uint32_t number);
     void UpdateGraph (QChart* chart);
     void ClearGraph (QChart* chart);
+
 Q_SIGNALS:
        void signalsGraph();
 private:
