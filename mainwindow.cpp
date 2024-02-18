@@ -10,25 +10,23 @@ MainWindow::MainWindow(QWidget *parent)
 ;
     graphClass = new GraphChart(FIRST_GRAPH);
     chart = new QChart();
-    chartView = new QChartView(chart);
+    //chartView = new QChartView(chart);
 
     dialog = new Dialog(this);
     layout = new QGridLayout;
-    connect(graphClass, &GraphChart::signalsGraph, this,&MainWindow::graphPrint );
 
 }
 
-//
-// Крашится и я не понимаю почему и где вышел за приделы //<----------***********
-//
 
 
-void MainWindow::graphPrint(){
+void MainWindow::graphPrint(QChart* chart){
 
-
+        chartView = new QChartView(chart);
         dialog->setLayout(new QVBoxLayout);
+
         dialog->layout()->addWidget(chartView);
         dialog->show();
+        qDebug() << "dialog->show()";
 }
 
 MainWindow::~MainWindow()
@@ -171,7 +169,7 @@ QVector<double> MainWindow::FindMin(QVector<double> resultData)
         }
     }
 
-    QVector<double> mins = {min, sMin};
+    QVector<double> mins = {static_cast<double>(min), static_cast<double>(sMin)};
     ui->chB_minSucess->setChecked(true);
     return mins;
 
@@ -244,33 +242,47 @@ void MainWindow::on_pb_start_clicked()
     auto process = [&](QVector<uint32_t> res){ return ProcessFile(res);};
 
     auto findMax = [&](QVector<double> res){
-
                                                 maxs = FindMax(res);
                                                 mins = FindMin(res);
                                                 DisplayResult(mins, maxs);
 
-                                                QVector<double> result  = process(read);
-                                                QVector<double> firstElement = result.first();
-                                                //QVector<double> lastElement = result.last();
+                                                 QElapsedTimer timer;
+                                                 timer.start();
+
+                                                 int q = 1;
+                                                 qDebug() << q;
+                                                 //QVector<double> x (res.size());
+                                                 //QVector<double> y (res.size());
+                                                 qDebug () <<res.last();
+
+                                                 qDebug () <<res.size() << res.last();
 
 
 
-                                                QElapsedTimer timer;
-                                                timer.start();
+                                               while (timer.elapsed() < 1000) {
+                                                    qDebug() << ++q;
 
-                                                while (timer.elapsed() < 1000) {
-                                                    QVector<double>::iterator i = firstElement ;
-                                                    graphClass->AddToGraph(i, ++i, FIRST_GRAPH);
-                                                    ++i;
-                                                    graphClass->UpdateGraph(chart);
-                                                }
+//                                                    for (auto i = 0; i < (res.size() - 2015000); ++i){
+//                                                        x[i] = res[i];
+//                                                        qDebug () << res[i] ;
+//                                                        y[i] = res[++i];
+//                                                        ++i;
+//                                                    }
+
+                                                    //qDebug () << x << "______"<< y ;
+
+                                                   // graphClass->AddToGraph(x, y , FIRST_GRAPH);
+
+                                                    //graphClass->UpdateGraph(chart);
+                                                //}
+
+                                                //graphClass->UpdateGraph(chart);
 
 
+                                               }
 
 
-                                                graphClass->UpdateGraph(chart);
-                                                emit (&GraphChart::signalsGraph);
-
+                                               graphPrint(chart);
 
 
 

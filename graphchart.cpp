@@ -11,7 +11,7 @@ GraphChart::GraphChart(uint32_t number)
 
 }
 
-void GraphChart::AddToGraph(QVector<double> x, QVector<double> y, uint32_t number){
+void GraphChart::AddToGraph(QVector<double> x, QVector<double> y, uint32_t numGraph){
 
     uint32_t size = 0;
 
@@ -22,9 +22,10 @@ void GraphChart::AddToGraph(QVector<double> x, QVector<double> y, uint32_t numbe
         size = x.size();
     }
 
+    //  qDebug () << x << "______"<< y ;
     //Добавление точек
-    for(int i = 0 ; i < size; i++){
-        ptrGraph[number]->append(x[i],y[i]);
+    for(int j = 0 ; j < size; j++){
+        ptrGraph[numGraph]->append(x[j],y[j]);
     }
 }
 

@@ -21,7 +21,7 @@ public:
     void ClearGraph (QChart* chart);
 
 Q_SIGNALS:
-       void signalsGraph();
+       void signalsGraph(QChart* chart);
 private:
 
    QList <QLineSeries*> ptrGraph;

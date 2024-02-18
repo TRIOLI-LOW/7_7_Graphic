@@ -7,6 +7,9 @@
 #include <QMessageBox>
 #include <QtGlobal>
 #include <QtConcurrent>
+#include <QElapsedTimer>
+#include <QVector>
+#include <QList>
 #include <algorithm>
 #include "graphchart.h"
 #include "dialog.h"
@@ -47,7 +50,7 @@ public:
 private slots:
     void on_pb_path_clicked();
     void on_pb_start_clicked();
-    void graphPrint();
+    void graphPrint(QChart* chart);
 
 
 private:
