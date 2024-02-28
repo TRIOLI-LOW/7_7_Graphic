@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     chart = new QChart();
+    chartView = new QChartView(chart);
+    graphClass = new GraphChart(NUM_GRAPHS);
 
 
     dialog = new Dialog(this);
@@ -22,8 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::graphPrint(QChart* chart){
 
-
-    graphClass = new GraphChart(x.size());
+    if (!(chart->isEmpty())){
+    graphClass->ClearGraph(chart);
+    }
 
     qDebug() << x.last() ;
     qDebug() << y << x.last();
@@ -32,7 +35,7 @@ void MainWindow::graphPrint(QChart* chart){
     graphClass->UpdateGraph(chart);
 
 
-        chartView = new QChartView(chart);
+
         dialog->setLayout(new QVBoxLayout);
 
         dialog->layout()->addWidget(chartView);
@@ -257,28 +260,20 @@ void MainWindow::on_pb_start_clicked()
                                                 mins = FindMin(res);
                                                 DisplayResult(mins, maxs);
 
-
-
-
                                                  qDebug () <<res.last();
-                                                 x.resize(500);
-                                                 y.resize(500);
+                                                 x.resize(1000);
+                                                 y.resize(1000);
 
+                                                 double step = 1;
 
                                                  qDebug () <<res.size() << x.size() << y.size()  ;
 
                                                  int countRes = 0;
 
-                                                 if(res.size() >= 500 ){
-                                                 for (auto i = 0; i < x .size() - 3 ;  ++i){
-                                                          x[i] = res[countRes++];
-                                                          qDebug() << res[countRes];
-                                                          qDebug () << i << countRes;
-
+                                                 if(res.size() >= 1000 ){
+                                                 for (auto i = 0; i < y .size() - 1 ;  ++i){
                                                           y[i] = res[countRes++];
-                                                          qDebug () << i << countRes;
-
-
+                                                          x[i] = step++;
 
                                                       }
                                                     qDebug () << "Vihod iz For";
@@ -294,10 +289,7 @@ void MainWindow::on_pb_start_clicked()
                                                 qDebug () << "EMIT" ;
                                                emit sig_graphPrint(chart);
                                                       }
-                                                /*
-                                                 * Тут необходимо реализовать код наполнения серии
-                                                 * и вызов сигнала для отображения графика
-                                                 */
+
 
                                              };
 

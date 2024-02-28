@@ -19,6 +19,7 @@
 #include <QtCharts>
 #include <QChartView>
 
+#define NUM_GRAPHS 1
 #define FD 1000.0 //частота дискретизации
 
 QT_BEGIN_NAMESPACE
